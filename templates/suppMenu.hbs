@@ -77,43 +77,120 @@
 
               <select id="category" name="category" class="feedback-input" required="required">
                 <option disabled selected> Please select a Category</option>
-                <option>Orders</option>
-                <option>Shipping</option>
-                <option>Cellular Service</option>
-                <option>Technical Help</option>
-                <option>Billing</option>
-                <option>Business Questions</option>
+                <option value="Hardware">Hardware: Devices, Firmware, and Setup</option>
+                <option value="Software">Software: Tools, and IDEs</option>
+                <option value="Infrastructure">Infrastructure: Cellular and Cloud</option>
+                <option value="Orders">Orders: Shipping and Billing</option>
+                <option value="Enterprise">Enterprise: Product Development &amp; Sales, Distributors</option>
+                <option value="Other">Other Questions</option>
               </select>
 
-              <select id="secondmenu" name="subOptions" class="feedback-input" required="required"></select>
+              <select id="detailmenu" name="detailOptions" class="feedback-input" style="display: none"></select>
+              <select id="questionmenu" name="subOptions" class="feedback-input" required="required"></select>
 
               <script>
               jQuery(function($) {
-                  var secondmenus = {
-                      'Orders': ['--Select a Order Topic--','Order Status','Something wrong with shopping cart',
-                                  'Update my Address', 'I may need a refund', 'I am tax exempt, what should I do?', 'Do you offer student discounts?'],
-                      'Shipping': ['--Select a Shipping Topic--','Where is my package?', 'What is my tracking number?','Where is my Electron?',
-                                  'I need an invoice'],
-                      'Cellular Service': ['--Select a Cellular Service Topic--','What is the cellular coverage?', 'What is my data cap?', 'Is there a cellular outage?',
-                                  'I am using a non-Particle SIM card', 'Is the Particle Cloud down?', 'Can I travel to other countries and my Electron still work?'],
-                      'Technical Help': ['--Select a Technical Topic--','Help claiming a device', 'Troubleshooting the P0/P1', 'Troubleshooting the Photon',
-                                        'Troubleshooting the Electron', 'Troubleshooting the Core', 'Building a product on Particle',
-                                        'A particle shield/kit/accessory', 'Particle Dashboard','Is the Particle Cloud down?', 'Other technical question'],
-                      'Billing': ['--Select a Billing Topic--','What am I being charged for?', 'Why am I being charged monthly?', 'What is my data limit + cost?',
-                                  'How do I update my credit card?', 'I may need a refund on my data', 'I may need a refund on the dashboard',
-                                  'Other billing questions'],
-                      'Business Questions': ['--Select a Business Topic--','I am interested in selling Particle products', 'I would like to write about you!',
-                                  'Can you sponsor my event?', 'You are awesome and I just want to tell you that!']
+                  var details = {
+                      'Hardware': [
+                          '--Select a device--',
+                          'Photon',
+                          'Electron',
+                          'Core',
+                          'Shield',
+                          '3rd party boards (Bluz, Redbear Duo, Oak',
+                      ],
+
+                      'Software': [
+                          '--Select a tool--',
+                          'CLI',
+                          'Web IDE',
+                          'Dev',
+                      ]
+                  };
+
+                  var questions = {
+                      'Hardware': [
+                          '--Select a hardware topic--',
+                          'I am unable to setup my device',
+                          'I am unable to claim my device',
+                          'I am unable to get my device online',
+                          'I am unable to flash my device',
+                          'My device is showing up as the wrong type',
+                          'My device is crashing / not operating correctly',
+                          'I am having an issue using an official Particle library, feature, or add-on board on/with my device',
+                          'I am having an issue using a 3rd party library, feature, or add-on board on/with my device',
+                          'My device has a hardware defect',
+                          'My device is doing something else',
+                      ],
+
+                      'Software': [
+                          '--Select a software topic--',
+                          'I am unable to flash a device',
+                          'I am unable to login',
+                          'I am unable to pull a device list',
+                          'I am unable to logout',
+                          'I am unable to add an app',
+                          'I am unable to add a library',
+                          'I am unable to view device logs',
+                          'An app I wrote is missing',
+                          'A device is showing up as the wrong kind of device',
+                          'I am unable to claim a device',
+                      ],
+
+                      'Infrastructure': [
+                          '--Select an infrastructure topic--',
+                          'My webhooks are not working'
+                      ],
+
+                      'Orders': [
+                          '--Select an orders question--',
+                          'Where is my package?',
+                          'I need an invoice for my store purchase.',
+                          'I need a return/refund.',
+                          'Did my payment go through?',
+                          'Why did I get charged?',
+                          'I need an invoice for my subscription service.'
+                      ],
+
+                      'Enterprise': [
+                          '--Select an enterprise question--',
+                          'I would like to become a distributor.',
+                          'I would like to place a large order (100+ units)',
+                          'I would like to develop a product on your platform.',
+                          'I have a general enterprise question.',
+                          'I would like to place a tax-exempt order. '
+                      ],
+
+                      'Other': [
+                          '--Select another question--',
+                          'What products do you sell?',
+                          'I submitted my resume and I’d like to follow up.',
+                          'I’d like Particle to sponsor or attend my event.',
+                          'I couldn’t find my questions on here. '
+                      ],
+
                   }
 
-                  var $secondmenus = $('#secondmenu');
+                  var $questionmenu = $('#questionmenu');
+                  var $detailmenu = $('#detailmenu');
                   $('#category').change(function () {
-                      var category = $(this).val(), lcns = secondmenus[category] || [];
+                      var category = $(this).val();
+                      var categoryDetails = details[category];
+                      var categoryQuestions = questions[category] || [];
+                      var html;
 
-                      var html = $.map(lcns, function(lcn){
-                          return '<option value="' + lcn + '">' + lcn + '</option>'
-                      }).join('');
-                      $secondmenus.html(html);
+                      $detailmenu.toggle(!!categoryDetails);
+                      if(categoryDetails) {
+                          html = $.map(categoryDetails, function (s) {
+                              return $('<option>').attr('value', s).html(s);
+                          });
+                          $detailmenu.html(html);
+                      }
+
+                      html = $.map(categoryQuestions, function (s){
+                          return $('<option>').attr('value', s).html(s);
+                      });
+                      $questionmenu.html(html);
                   });
 
               })
